@@ -4,6 +4,7 @@
 
 #include <FastLED.h>
 #include <TaskManager.h>
+#include <GammaTable.h>
 
 #include "LEDSequencer.h"
 
