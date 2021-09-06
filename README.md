@@ -16,6 +16,7 @@ My FastLED Manager that can generate multiple sequences with layered (mixed) out
 - [FastLED](https://github.com/FastLED/FastLED)
 - [TaskManager](https://github.com/hideakitai/TaskManager)
 - [Tween](https://github.com/hideakitai/Tween)
+- [GammaTable](https://github.com/hideakitai/GammaTable)
 
 ## Overview
 
@@ -152,6 +153,7 @@ Manager& dither(const uint8_t dither_mode);
 Manager& correction(const CRGB& clr_correction);
 Manager& temperature(const CRGB& clr_temperature);
 Manager& fadeout(const uint8_t v);
+Manager& gamma(const float v);
 Manager& layer(const bool b);
 Manager& divide();  // TBD
 // ESP32 Only
@@ -187,6 +189,7 @@ Controller& dither(const uint8_t dither_mode);
 Controller& correction(const CRGB& clr_correction);
 Controller& temperature(const CRGB& clr_temperature);
 Controller& fadeout(const uint8_t v);
+Controller& gamma(const float v);
 Controller& layer(const bool b);
 Controller& divide();  // TBD
 // ESP32 Only

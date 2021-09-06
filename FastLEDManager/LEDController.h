@@ -13,6 +13,7 @@ class Controller : public Task::Base {
 protected:
     CLEDController* fastled {nullptr};
     CPixelView<CRGB>& leds;
+    GammaTable<uint8_t, 256> gamma_tbl {1.f};
     bool b_assigned {false};
     bool b_layered {true};
     uint8_t fade_value {0};
@@ -114,6 +115,14 @@ public:
             }
         }
 
+        // apply gamma
+        if (gamma_tbl.gamma() != 1.f) {
+            for (size_t p = 0; p < leds.size(); ++p) {
+                for (size_t c = 0; c < 3; ++c) {
+                    leds[p][c] = gamma_tbl[leds[p][c]];
+                }
+            }
+        }
         show();
     }
 
@@ -149,6 +158,11 @@ public:
 
     Controller& fadeout(const uint8_t v) {
         fade_value = v;
+        return *this;
+    }
+
+    Controller& gamma(const float v) {
+        gamma_tbl.gamma(v);
         return *this;
     }
 

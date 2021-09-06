@@ -123,6 +123,11 @@ public:
         return *this;
     }
 
+    Manager& gamma(const float v) {
+        for (auto& t : tasks) t->gamma(v);
+        return *this;
+    }
+
     Manager& layer(const bool b) {
         for (auto& t : tasks) t->layer(b);
         return *this;
