@@ -192,10 +192,10 @@ public:
 
     // ---------- Access to task / controller ----------
 
-    LEDTaskRef getControllerByName(const String& name) const {
+    LEDTaskRef get_controller_by_name(const String& name) const {
         return Tasks.getTaskByName<Controller>(name);
     }
-    LEDTaskRef getControllerByIndex(const size_t idx) const {
+    LEDTaskRef get_controller_by_index(const size_t idx) const {
         if (idx >= tasks.size()) {
             LOG_ERROR("Index overrun:", idx, "should be <", tasks.size());
             return nullptr;
@@ -204,12 +204,12 @@ public:
     }
 
     Controller& operator[](const String& name) const {
-        auto controller_ref = getControllerByName(name);
+        auto controller_ref = get_controller_by_name(name);
         ASSERTM(controller_ref != nullptr, "LED Controller NOT FOUND");
         return *(controller_ref.get());
     }
     Controller& operator[](const size_t idx) const {
-        auto controller_ref = getControllerByIndex(idx);
+        auto controller_ref = get_controller_by_index(idx);
         ASSERTM(controller_ref != nullptr, "LED Controller NOT FOUND");
         return *(controller_ref.get());
     }

@@ -303,10 +303,10 @@ public:
         return create_sequence<sequencer::Progress>(name);
     }
     sequencer::Progress* progress_ratio(const String& name, const float rate) {
-        return getSequence<sequencer::Progress>(name)->ratio(rate);
+        return get_sequence<sequencer::Progress>(name)->ratio(rate);
     }
     sequencer::Progress* progress_percent(const String& name, const float percent) {
-        return getSequence<sequencer::Progress>(name)->percent(percent);
+        return get_sequence<sequencer::Progress>(name)->percent(percent);
     }
 
     TaskRef<sequencer::Random> random() {
@@ -365,11 +365,11 @@ public:
 
     // ---------- Accessor ----------
 
-    CPixelView<CRGB>& getPixelView() { return leds; }
-    const CPixelView<CRGB>& getPixelView() const { return leds; }
+    CPixelView<CRGB>& get_pixel_view() { return leds; }
+    const CPixelView<CRGB>& get_pixel_view() const { return leds; }
 
     template <typename TaskType = Base>
-    TaskRef<TaskType> getSequence(const String& name) const {
+    TaskRef<TaskType> get_sequence(const String& name) const {
         if (this->existsSubTask(name))
             return this->getSubTaskByName<TaskType>(name);
         else
@@ -377,7 +377,7 @@ public:
     }
 
     template <typename TaskType = Base>
-    TaskRef<TaskType> getSequenceByIndex(const size_t idx) const {
+    TaskRef<TaskType> get_sequence_by_index(const size_t idx) const {
         if (idx < this->numSubTasks())
             return this->getSubTaskByIndex<TaskType>(idx);
         else

@@ -134,8 +134,6 @@ void setup() {
 }
 ```
 
-### Overwrite
-
 ## LEDManager
 
 ```C++
@@ -173,8 +171,8 @@ Manager& fill_solid(const CRGB& c);
 
 // ---------- Access to task / controller ----------
 
-LEDTaskRef getControllerByName(const String& name) const;
-LEDTaskRef getControllerByIndex(const size_t idx) const;
+LEDTaskRef get_controller_by_name(const String& name) const;
+LEDTaskRef get_controller_by_index(const size_t idx) const;
 Controller& operator[](const String& name) const;
 Controller& operator[](const size_t idx) const;
 ```
