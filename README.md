@@ -166,6 +166,8 @@ Manager& show(const uint8_t brightness = 0);
 Manager& delay(const uint32_t ms);
 /// show current color once and hold it until timeout
 Manager& hold(const uint32_t ms);
+// set assigned flag not to clear the output buffer
+Manager& assign(const bool b);
 // fill led buffer immediately
 Manager& fill_solid(const CRGB& c);
 
@@ -196,13 +198,16 @@ Controller& multi_core_config(const uint8_t core, const uint32_t stack_size, con
 
 // ---------- LED Control ----------
 
+Controller& show(const uint8_t brightness = 0);
+Controller& delay(const uint32_t ms);
+Controller& hold(const uint32_t ms);
+
+Controller& attach(CPixelView<CRGB>* led);
 template <typename PixelType = CRGB>
 Controller& assign(const PixelType* colors, const size_t size);
 template <typename PixelType = CRGB>
 Controller& assign(CPixelView<PixelType>& colors);
-Controller& show(const uint8_t brightness = 0);
-Controller& delay(const uint32_t ms);
-Controller& hold(const uint32_t ms);
+Controller& assign(const bool b);
 
 // ---------- LED Control (Immediate) ----------
 
@@ -249,11 +254,17 @@ template <typename TaskType> TaskRef<TaskType> overwrite();
 
 // ---------- Accessor ----------
 
-CPixelView<CRGB>& getPixelView();
-const CPixelView<CRGB>& getPixelView() const;
-
-template <typename TaskType = Base> TaskRef<TaskType> getSequence(const String& name) const;
-template <typename TaskType = Base> TaskRef<TaskType> getSequenceByIndex(const size_t idx) const;
+CPixelView<CRGB>& get_pixel_view();
+const CPixelView<CRGB>& get_pixel_view() const;
+uint8_t* get_pixel_ptr();
+const uint8_t* get_pixel_ptr() const;
+size_t num_pixels() const;
+size_t num_pixel_bytes() const;
+size_t num_active_sequences() const;
+bool has_assigned() const;
+bool has_attached() const;
+template <typename TaskType = Base> TaskRef<TaskType> get_sequence(const String& name) const;
+template <typename TaskType = Base> TaskRef<TaskType> get_sequence_by_index(const size_t idx) const;
 ```
 
 ## LEDSequence

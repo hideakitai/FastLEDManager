@@ -14,6 +14,7 @@ class Controller : public Task::Base {
 protected:
     CLEDController* fastled {nullptr};
     CPixelView<CRGB>& leds;
+    CPixelView<CRGB>* leds_attached {nullptr};
     GammaTable<uint8_t, 256> gamma_tbl {1.f};
     bool b_assigned {false};
     bool b_layered {true};
@@ -89,11 +90,16 @@ public:
     }
 
     virtual void update() override {
+        // copy attached data to output buffer if attached
+        // this always overwrite the assigned data
+        // this also overwrite the sequence data if layered is false
+        if (has_attached()) {
+            leds = *leds_attached;
+        }
+
         // accumulate all sequences if layered
         if (b_layered) {
-            if (b_assigned) {
-                b_assigned = false;
-            } else {
+            if (!has_attached() && !has_assigned()) {
                 leds.fill_solid(CRGB::Black);
             }
 
@@ -103,6 +109,10 @@ public:
                     leds += st->colors();
                 }
             }
+        } else {
+            // output led buffer is directly referred from every sequences
+            // and automatically updated in each sequence's update()
+            // so if external pixels are attached, it will be overwritten by it
         }
 
         // overwrite output
@@ -124,6 +134,12 @@ public:
                 }
             }
         }
+
+        // clear assigned flag
+        if (has_assigned()) {
+            b_assigned = false;
+        }
+
         show();
     }
 
@@ -193,23 +209,6 @@ public:
 
     // ---------- LED Control ----------
 
-    template <typename PixelType = CRGB>
-    Controller& assign(const PixelType* colors, const size_t size) {
-        CPixelView<PixelType> c(colors, size);
-        return assign(c);
-    }
-
-    template <typename PixelType = CRGB>
-    Controller& assign(CPixelView<PixelType>& colors) {
-        if (colors.size() > leds.size()) {
-            LOG_ERROR("Assigned pixel size is out of range:", colors.size(), "should be <", leds.size());
-        } else {
-            leds = colors;
-            b_assigned = true;
-        }
-        return *this;
-    }
-
     Controller& show(const uint8_t brightness = 0) {
 #ifdef ARDUINO_ARCH_ESP32
         if (b_multi_core && (handle_task_led_show != NULL)) {
@@ -250,6 +249,34 @@ public:
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us)
             ;
+        return *this;
+    }
+
+    Controller& attach(CPixelView<CRGB>* led) {
+        leds_attached = led;
+        return *this;
+    }
+
+    template <typename PixelType = CRGB>
+    Controller& assign(const PixelType* colors, const size_t size) {
+        CPixelView<PixelType> c(colors, size);
+        return assign(c);
+    }
+
+    template <typename PixelType = CRGB>
+    Controller& assign(CPixelView<PixelType>& colors) {
+        if (colors.size() > leds.size()) {
+            LOG_ERROR("Assigned pixel size is out of range:", colors.size(), "should be <", leds.size());
+        } else {
+            leds = colors;
+            b_assigned = true;
+        }
+        return *this;
+    }
+
+    // set assigned flag not to clear the output buffer
+    Controller& assign(const bool b) {
+        b_assigned = b;
         return *this;
     }
 
@@ -368,6 +395,22 @@ public:
 
     CPixelView<CRGB>& get_pixel_view() { return leds; }
     const CPixelView<CRGB>& get_pixel_view() const { return leds; }
+
+    uint8_t* get_pixel_ptr() { return leds[0].raw; }
+    const uint8_t* get_pixel_ptr() const { return leds[0].raw; }
+
+    size_t num_pixels() const { return leds.size(); }
+    size_t num_pixel_bytes() const { return leds.size() * sizeof(CRGB); }
+
+    size_t num_active_sequences() const {
+        size_t cnt = 0;
+        for (auto& s : subtasks)
+            if (s->isRunning()) ++cnt;
+        return cnt;
+    }
+
+    bool has_assigned() const { return b_assigned; }
+    bool has_attached() const { return leds_attached != nullptr; }
 
     template <typename TaskType = Base>
     TaskRef<TaskType> get_sequence(const String& name) const {

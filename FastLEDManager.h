@@ -177,6 +177,12 @@ public:
         return *this;
     }
 
+    // set assigned flag not to clear the output buffer
+    Manager& assign(const bool b) {
+        for (auto& t : tasks) t->assign(b);
+        return *this;
+    }
+
     // ---------- LED Control (Immediate) ----------
 
     Manager& fill_solid(const CRGB& c) {
