@@ -33,13 +33,32 @@ This library is consists of three classes:
 
 ![overview](assets/overview.png)
 
-### Layered (Mixed) Output
+### Layered (Mixed) Output and External LED Buffer Attachment/Assignment
 
 `LEDController` can have multiple `LEDSequencer`s at the same time. The `LEDController` outputs the accumulated value of all `LEDSequence`s by default. But it allocates the heap for each sequences. You can disable layer if you don't need to layer (mix) them. If the layer is disabled, each sequence have the reference for the output buffer of LEDController.
 
-### External Pixel Assignment
+This library also have the feature called `attach()` and `assign()`. `attach()` attaches the existing LED buffer to the controller as the base layer. `assign()` assigns the exising LED buffer to the base layer only next frame. If `attach()` is used, `assign()`ed buffer is always ignored.
 
-You can also assign your own LED buffer to the output buffer. If you assigned it manually, the sequences are accumulated onto it.
+The relationship of these features are summarized as follows:
+
+| Layer | Attach | Assign | Sequence | Output                                              |
+| ----- | ------ | ------ | -------- | --------------------------------------------------- |
+|       |        |        |          | Black                                               |
+|       | X      |        |          | Attached                                            |
+|       |        | X      |          | Assigned (only one frame)                           |
+|       |        |        | X        | Last Sequences                                      |
+|       | X      | X      |          | Attached                                            |
+|       | X      |        | X        | Attached                                            |
+|       |        | X      | X        | Assigned or Last Sequence (depending on the timing) |
+|       | X      | X      | X        | Attached                                            |
+| X     |        |        |          | Black                                               |
+| X     | X      |        |          | Attached                                            |
+| X     |        | X      |          | Assigned (only one frame)                           |
+| X     |        |        | X        | Mixed Sequences                                     |
+| X     | X      | X      |          | Attached                                            |
+| X     | X      |        | X        | Attached + Mixed Sequence                           |
+| X     |        | X      | X        | Assigned (only one frame) + Mixed Sequence          |
+| X     | X      | X      | X        | Attached + Mixed Sequence                           |
 
 ### Overwrite LED
 
