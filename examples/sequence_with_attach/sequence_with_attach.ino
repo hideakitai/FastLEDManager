@@ -10,6 +10,7 @@ void setup() {
     delay(2000);
 
     $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+        .attach(&rgb)
         .startFps(120);
 
     using namespace LEDSequence;
@@ -37,11 +38,6 @@ void loop() {
     rgb.fill_rainbow(uint8_t(float(millis() % 3000) / 3000.f * 255.f));
     rgb.nscale8(48);
 
-    // This the base layer
-    // NOTE: if this framerate is less than LEDController's framerate,
-    // it causes flicker because assignment is valid only on frame
-    // if you want not to flicker, please use attach() instead
-    $LED["WS2812"].assign(rgb);
-
+    // attached colors are automatically reflected as the base layer
     Tasks.update();
 }

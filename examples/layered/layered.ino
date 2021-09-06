@@ -14,7 +14,7 @@ void setup() {
 
     $LED["WS2812"]
         .fill()
-        ->color(CRGB(0, 0, 32))
+        ->color(CRGB(32, 0, 0))
         ->startFpsForSec(30, 10.);
 
     $LED["WS2812"]

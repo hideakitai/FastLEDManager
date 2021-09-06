@@ -12,7 +12,7 @@ void setup() {
 
     // Get CPixelView<CRGB> from "WS2812" Controller
     // This is almost same as CRGBArray<N_LEDS>
-    auto& leds = $LED["WS2812"].getPixelView();
+    auto& leds = $LED["WS2812"].get_pixel_view();
 
     // One way to handle led buffer manually is to call hold()
     // hold() shows current led buffer once and suspend program
