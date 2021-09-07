@@ -23,39 +23,25 @@ void setup() {
         .correction(CRGB::White)
         .temperature(CRGB::White)
         .fadeout(0)
+        .gamma(1.f)
         .layer(true)
         .divide()  // TODO: TBD (currently do nothing)
 #ifdef ARDUINO_ARCH_ESP32
         .multi_core(true)
-        .multi_core_config(0, 1024, 2)
+        .multi_core_config(0, 1024, 2)  // core, stack_size, priority
 #endif
         .startFps(120);
 
-    // These are the default configs
     $LED.add<SK6812, N_LEDS, PIN_SK6812_DATA, GRB>("SK6812")
-        .brightness(SK6812_BRIGHTNESS)
-        .dither(BINARY_DITHER)
-        .correction(CRGB::White)
-        .temperature(CRGB::White)
-        .fadeout(0)
-        .layer(true)
-        .divide()  // TODO: TBD (currently do nothing)
-#ifdef ARDUINO_ARCH_ESP32
-        .multi_core(true)
-        .multi_core_config(0, 1024, 2)
-#endif
+        .configs($LED["WS2812"].configs())  // copy config from WS2812
+        .brightness(SK6812_BRIGHTNESS)      // overwrite only brightness
         .startFps(120);
 
     // These are the default configs
     // $LED.add<APA102, N_LEDS, PIN_APA102_DATA, PIN_APA102_CLK, GRB, DATA_RATE_MHZ(12)>("APA102", 120)
-    //    .brightness(APA102_BRIGHTNESS)
-    //    .dither(BINARY_DITHER)
-    //    .correction(CRGB::White)
-    //    .temperature(CRGB::White)
-    //    .fadeout(0)
-    //    .layer(true)
-    //    .divide()  // TODO: TBD (currently do nothing)
-    //    .startFps(120);
+    //     .configs($LED["WS2812"].configs())  // copy config from WS2812
+    //     .brightness(APA102_BRIGHTNESS)    // overwrite only brightness
+    //     .startFps(120);
 
     $LED["WS2812"]
         .mood_machine()
