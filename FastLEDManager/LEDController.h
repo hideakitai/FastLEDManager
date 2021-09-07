@@ -11,29 +11,36 @@
 namespace led {
 
 class Controller : public Task::Base {
-protected:
-    CLEDController* fastled {nullptr};
-    CPixelView<CRGB>& leds;
-    CPixelView<CRGB>* leds_attached {nullptr};
-    GammaTable<uint8_t, 256> gamma_tbl {1.f};
-    bool b_assigned {false};
-    bool b_layered {true};
-    uint8_t fade_value {0};
-
     struct Config {
+        // CLEDController
         uint8_t brightness {255};
         uint8_t dither {BINARY_DITHER};
         uint16_t refresh_rate {0};
         bool refresh_constrain {false};
         CRGB correction {CRGB::White};
         CRGB temperature {CRGB::White};
-    } config;
+        // Others
+        bool b_layered {true};
+        uint8_t fade_value {0};
+        float gamma {1.f};
+        // ESP32
+#ifdef ARDUINO_ARCH_ESP32
+        bool b_multi_core {true};
+        uint8_t task_led_show_core {0};            // core 1: main app
+        uint32_t task_led_show_stack_size {1024};  // bytes
+        uint32_t task_led_show_priority {2};       // LOW 0 - 25 HIGH
+#endif
+    };
+
+protected:
+    CLEDController* fastled {nullptr};
+    CPixelView<CRGB>& leds;
+    CPixelView<CRGB>* leds_attached {nullptr};
+    GammaTable<uint8_t, 256> gamma_tbl {1.f};
+    bool b_assigned {false};
+    Config config;
 
 #ifdef ARDUINO_ARCH_ESP32
-    bool b_multi_core {true};
-    uint8_t task_led_show_core {0};            // core 1: main app
-    uint32_t task_led_show_stack_size {1024};  // bytes
-    uint32_t task_led_show_priority {2};       // LOW 0 - 25 HIGH
     TaskHandle_t handle_task_led_show {NULL};
 
     // TODO: Notify back to main task from isr
@@ -70,17 +77,17 @@ public:
         leds.fill_solid(CRGB::Black);
 
 #ifdef ARDUINO_ARCH_ESP32
-        if (b_multi_core) {
+        if (config.b_multi_core) {
             // create the isr task for fastled show()
             if (handle_task_led_show == NULL) {
                 xTaskCreatePinnedToCore(
                     isr_task_led_show,
                     this->getName().c_str(),
-                    task_led_show_stack_size,
+                    config.task_led_show_stack_size,
                     this,  // pass Controller* as pvParameters
-                    task_led_show_priority,
+                    config.task_led_show_priority,
                     &handle_task_led_show,
-                    task_led_show_core);
+                    config.task_led_show_core);
             }
         }
 #endif
@@ -98,7 +105,7 @@ public:
         }
 
         // accumulate all sequences if layered
-        if (b_layered) {
+        if (config.b_layered) {
             if (!has_attached() && !has_assigned()) {
                 leds.fill_solid(CRGB::Black);
             }
@@ -157,34 +164,35 @@ public:
 
     Controller& dither(const uint8_t dither_mode) {
         config.dither = dither_mode;
-        fastled->setDither(dither_mode);
+        fastled->setDither(config.dither);
         return *this;
     }
 
     Controller& correction(const CRGB& clr_correction) {
         config.correction = clr_correction;
-        fastled->setCorrection(clr_correction);
+        fastled->setCorrection(config.correction);
         return *this;
     }
 
     Controller& temperature(const CRGB& clr_temperature) {
         config.temperature = clr_temperature;
-        fastled->setTemperature(clr_temperature);
+        fastled->setTemperature(config.temperature);
         return *this;
     }
 
     Controller& fadeout(const uint8_t v) {
-        fade_value = v;
+        config.fade_value = v;
         return *this;
     }
 
     Controller& gamma(const float v) {
-        gamma_tbl.gamma(v);
+        config.gamma = v;
+        gamma_tbl.gamma(config.gamma);
         return *this;
     }
 
     Controller& layer(const bool b) {
-        b_layered = b;
+        config.b_layered = b;
         return *this;
     }
 
@@ -196,22 +204,31 @@ public:
 
 #ifdef ARDUINO_ARCH_ESP32
     Controller& multi_core(const bool b) {
-        b_multi_core = b;
+        config.b_multi_core = b;
         return *this;
     }
     Controller& multi_core_config(const uint8_t core, const uint32_t stack_size, const uint32_t priority) {
-        task_led_show_core = core;              // core 1: main app
-        task_led_show_stack_size = stack_size;  // bytes
-        task_led_show_priority = priority;      // LOW 0 - 25 HIGH
+        config.task_led_show_core = core;              // core 1: main app
+        config.task_led_show_stack_size = stack_size;  // bytes
+        config.task_led_show_priority = priority;      // LOW 0 - 25 HIGH
         return *this;
     }
 #endif
+
+    Controller& configs(const Config& cfg) {
+        config = cfg;
+        return *this;
+    }
+
+    const Config& configs() const {
+        return config;
+    }
 
     // ---------- LED Control ----------
 
     Controller& show(const uint8_t brightness = 0) {
 #ifdef ARDUINO_ARCH_ESP32
-        if (b_multi_core && (handle_task_led_show != NULL)) {
+        if (config.b_multi_core && (handle_task_led_show != NULL)) {
             trigger_led_show();
         } else {
             show_impl(brightness);
@@ -229,8 +246,8 @@ private:
         else
             fastled->showLeds(brightness);
 
-        if (fade_value != 0)
-            leds.fadeToBlackBy(fade_value);
+        if (config.fade_value != 0)
+            leds.fadeToBlackBy(config.fade_value);
     }
 
 public:
@@ -439,7 +456,7 @@ private:
 
     template <typename T>
     void assign_leds_to_task(T& task) {
-        if (b_layered) {
+        if (config.b_layered) {
             task->allocate(leds.size());
         } else {
             task->attach(leds);
