@@ -19,18 +19,10 @@ namespace sequencer {
         : Sequencer(name) {}
 
         virtual void enter() override {
-            // Serial.print("sq enter ");
-            // Serial.println(this->getSubTaskIndex());
             leds->fill_solid(CRGB::Black);
         }
 
         virtual void update() override {
-            // Serial.print(this->getName());
-            // Serial.print(" ");
-            // Serial.print(this->frame());
-            // Serial.print(" ");
-            // Serial.println(this->getSubTaskIndex());
-
             switch (this->getSubTaskMode()) {
                 case SubTaskMode::SYNC: {
                     leds->fill_solid(CRGB::Black);
@@ -44,11 +36,6 @@ namespace sequencer {
                     for (size_t i = 0; i < numSubTasks(); ++i) {
                         auto st = getSubTaskByIndex<Sequencer>(i);
                         if (st->isRunning()) {
-                            // Serial.print(st->getName());
-                            // Serial.print(" ");
-                            // Serial.print(st->frame());
-                            // Serial.print(" ");
-                            // Serial.println(i);
                             if (st->leds_valid()) {
                                 *leds = st->colors();
                             }
@@ -63,8 +50,6 @@ namespace sequencer {
         }
 
         virtual void exit() override {
-            // Serial.print("sq exit ");
-            // Serial.println(this->getSubTaskIndex());
             leds->fill_solid(CRGB::Black);
         }
 
