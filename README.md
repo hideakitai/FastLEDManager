@@ -214,6 +214,8 @@ Controller& divide();  // TBD
 // ESP32 Only
 Controller& multi_core(const bool b);
 Controller& multi_core_config(const uint8_t core, const uint32_t stack_size, const uint32_t priority);
+Controller& configs(const Config& cfg);
+const Config& configs() const;
 
 // ---------- LED Control ----------
 
@@ -271,6 +273,28 @@ TaskRef<sequencer::TweenEach> tween_each(const String& name);
 // overwrite output
 template <typename TaskType> TaskRef<TaskType> overwrite();
 
+// configuration
+struct Config {
+    // CLEDController
+    uint8_t brightness {255};
+    uint8_t dither {BINARY_DITHER};
+    uint16_t refresh_rate {0};
+    bool refresh_constrain {false};
+    CRGB correction {CRGB::White};
+    CRGB temperature {CRGB::White};
+    // Others
+    bool b_layered {true};
+    uint8_t fade_value {0};
+    float gamma {1.f};
+    // ESP32
+#ifdef ARDUINO_ARCH_ESP32
+    bool b_multi_core {true};
+    uint8_t task_led_show_core {0};            // core 1: main app
+    uint32_t task_led_show_stack_size {1024};  // bytes
+    uint32_t task_led_show_priority {2};       // LOW 0 - 25 HIGH
+#endif
+};
+
 // ---------- Accessor ----------
 
 CPixelView<CRGB>& get_pixel_view();
@@ -298,6 +322,12 @@ Please see examples for detals.
 
 ```C++
 void delay(const uint32_t ms);
+Delay* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    uint32_t delay_ms {0};
+};
 ```
 
 ### Fill
@@ -311,6 +341,15 @@ Fill* color(const CRGB& c);
 Fill* color(const CRGB& c, const size_t sz);
 Fill* color(const CRGB& c, const size_t idx, const size_t sz);
 Fill* fade_by(const uint8_t v);
+Fill* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    CRGB clr {CRGB::Black};
+    size_t idx {0};
+    size_t sz {0};
+    uint8_t fade {0};
+};
 ```
 
 ### Flash
@@ -339,7 +378,15 @@ void loop() {
 Flash* color(const CRGB& clr);
 Flash* cycle_ms(const uint32_t ms);
 Flash* half_cycle_ms(const uint32_t ms);
+Flash* configs(const Config& cfg);
+const Config& configs() const;
+
 // 1 cycle = high -> low -> (here) -> high ...
+struct Config {
+    CRGB target_clr {CRGB::Black};
+    uint32_t duration_ms {0};
+    uint32_t start_ms {0};
+};
 ```
 
 ### Line
@@ -372,6 +419,18 @@ Line* pixel_delay(const uint32_t delay_ms);
 Line* fadeout_ms(const uint32_t ms);
 Line* reverse(bool b);
 Line* repeat(bool b);
+Line* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    CRGB clr_from {CRGB::Black};
+    CRGB clr_to {CRGB::Black};
+    uint32_t pixel_delay_ms {0};
+    uint32_t total_delay_ms {0};
+    uint32_t duration_ms {0};
+    bool b_reverse {false};
+    bool b_repeat {false};
+};
 ```
 
 ### Mood Machine
@@ -428,6 +487,13 @@ void loop() {
 Progress* color(const CRGB& c);
 Progress* ratio(const float r);
 Progress* percent(const float p);
+Progress* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    CRGB clr {CRGB::Black};
+    float rate {0.};
+};
 ```
 
 ### Random
@@ -463,6 +529,17 @@ Random* color(const CRGB& c);
 Random* num_at_once(const size_t n);
 Random* every_n_frame(const size_t n);
 Random* fade_by(const uint8_t v);
+Random* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    size_t index {0};
+    size_t sz {0};
+    CRGB clr {CRGB::Black};
+    size_t n_at_once {1};
+    size_t n_per_frame {1};
+    uint8_t fade_value {10};
+};
 ```
 
 ### RGBW
@@ -492,6 +569,13 @@ void loop() {
 ```C++
 RGBW* duration(const uint32_t ms);
 RGBW* repeat(bool b);
+RGBW* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    uint32_t duration_ms {0};
+    bool b_repeat {false};
+};
 ```
 
 ### RRGGBBWW
@@ -521,6 +605,13 @@ void loop() {
 ```C++
 RRGGBBWW* duration(const uint32_t ms);
 RRGGBBWW* repeat(bool b);
+RRGGBBWW* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    uint32_t duration_ms {0};
+    bool b_repeat {false};
+};
 ```
 
 ### Triangle
@@ -549,6 +640,14 @@ void loop() {
 Triangle* color(const CRGB& clr);
 Triangle* cycle_ms(const uint32_t ms);
 Triangle* half_cycle_ms(const uint32_t ms);
+Triangle* configs(const Config& cfg);
+const Config& configs() const;
+
+struct Config {
+    CRGB target_clr {CRGB::Black};
+    uint32_t duration_ms {0};
+    uint32_t start_ms {0};
+};
 ```
 
 ### TweenEach
