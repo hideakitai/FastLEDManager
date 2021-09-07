@@ -12,8 +12,10 @@ namespace led {
 namespace sequencer {
 
     class Progress : public Sequencer {
-        CRGB clr {CRGB::Black};
-        float rate {0.};
+        struct Config {
+            CRGB clr {CRGB::Black};
+            float rate {0.};
+        } config;
 
     public:
         virtual ~Progress() {}
@@ -22,25 +24,34 @@ namespace sequencer {
         : Sequencer(name) {}
 
         Progress* color(const CRGB& c) {
-            clr = c;
+            config.clr = c;
             return this;
         }
 
         Progress* ratio(const float r) {
-            this->rate = r;
+            config.rate = r;
             return this;
         }
 
         Progress* percent(const float p) {
-            this->rate = p / 100.f;
+            config.rate = p / 100.f;
             return this;
         }
 
+        Progress* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
+        }
+
         virtual void update() override {
-            size_t sz = floor((float)leds->size() * rate);
-            if (rate < 0.f) sz = 0;
-            if (rate >= 1.f) sz = leds->size();
-            ::fill_solid(*leds, sz, clr);
+            size_t sz = floor((float)leds->size() * config.rate);
+            if (config.rate < 0.f) sz = 0;
+            if (config.rate >= 1.f) sz = leds->size();
+            ::fill_solid(*leds, sz, config.clr);
         }
 
         virtual void exit() override {

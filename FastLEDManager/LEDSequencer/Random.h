@@ -12,12 +12,14 @@ namespace led {
 namespace sequencer {
 
     class Random : public Sequencer {
-        CRGB clr;
-        size_t index {0};
-        size_t sz {0};
-        size_t n_at_once {1};
-        size_t n_per_frame {1};
-        uint8_t fade_value {10};
+        struct Config {
+            size_t index {0};
+            size_t sz {0};
+            CRGB clr {CRGB::Black};
+            size_t n_at_once {1};
+            size_t n_per_frame {1};
+            uint8_t fade_value {10};
+        } config;
 
     public:
         virtual ~Random() {}
@@ -26,46 +28,57 @@ namespace sequencer {
         : Sequencer(name) {}
 
         Random* range(const size_t idx, const size_t sz) {
-            index = idx;
-            this->sz = sz;
+            config.index = idx;
+            config.sz = sz;
             return this;
         }
 
         Random* color(const CRGB& c) {
-            clr = c;
+            config.clr = c;
             return this;
         }
 
         Random* num_at_once(const size_t n) {
-            n_at_once = n;
+            config.n_at_once = n;
             return this;
         }
 
         Random* every_n_frame(const size_t n) {
-            n_per_frame = n;
+            config.n_per_frame = n;
             return this;
         }
 
         Random* fade_by(const uint8_t v) {
-            fade_value = v;
+            config.fade_value = v;
             return this;
         }
 
+        Random* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
+        }
+
         virtual void enter() override {
-            if ((index == 0) && (sz == 0)) sz = this->leds->size();
+            if ((config.index == 0) && (config.sz == 0)) {
+                config.sz = this->leds->size();
+            }
         }
 
         virtual void update() override {
             static size_t cnt = 0;
-            if (cnt++ % n_per_frame == 0) {
-                for (size_t i = 0; i < n_at_once; ++i) {
+            if (cnt++ % config.n_per_frame == 0) {
+                for (size_t i = 0; i < config.n_at_once; ++i) {
                     randomSeed(micros());
-                    size_t idx = random(index, index + sz);
-                    (*leds)[idx] = clr;
+                    size_t idx = random(config.index, config.index + config.sz);
+                    (*leds)[idx] = config.clr;
                 }
             }
-            if (fade_value != 0)
-                leds->fadeToBlackBy(fade_value);
+            if (config.fade_value != 0)
+                leds->fadeToBlackBy(config.fade_value);
         }
 
         virtual void exit() override {

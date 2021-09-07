@@ -12,14 +12,17 @@ namespace led {
 namespace sequencer {
 
     class Line : public Sequencer {
+        struct Config {
+            CRGB clr_from {CRGB::Black};
+            CRGB clr_to {CRGB::Black};
+            uint32_t pixel_delay_ms {0};
+            uint32_t total_delay_ms {0};
+            uint32_t duration_ms {0};
+            bool b_reverse {false};
+            bool b_repeat {false};
+        } config;
+
         Tween::Timeline timeline;
-        CRGB clr_from {CRGB::Black};
-        CRGB clr_to {CRGB::Black};
-        uint32_t duration_ms {0};
-        uint32_t pixel_delay_ms {0};
-        uint32_t total_delay_ms {0};
-        bool b_reverse {false};
-        bool b_repeat {false};
 
     public:
         virtual ~Line() {}
@@ -28,34 +31,43 @@ namespace sequencer {
         : Sequencer(name) {}
 
         Line* color(const CRGB& clr) {
-            clr_from = clr;
-            clr_to = CRGB::Black;
+            config.clr_from = clr;
+            config.clr_to = CRGB::Black;
             return this;
         }
 
         Line* pixel_delay(const uint32_t delay_ms) {
-            pixel_delay_ms = delay_ms;
-            total_delay_ms = delay_ms * leds->size();
+            config.pixel_delay_ms = delay_ms;
+            config.total_delay_ms = delay_ms * leds->size();
             return this;
         }
 
         Line* fadeout_ms(const uint32_t ms) {
-            duration_ms = ms;
+            config.duration_ms = ms;
             return this;
         }
 
         Line* reverse(bool b) {
-            b_reverse = b;
+            config.b_reverse = b;
             return this;
         }
 
         Line* repeat(bool b) {
-            b_repeat = b;
+            config.b_repeat = b;
             return this;
         }
 
+        Line* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
+        }
+
         virtual void enter() override {
-            if (b_repeat) {
+            if (config.b_repeat) {
                 timeline.mode(Tween::Mode::REPEAT_SQ);
             } else {
                 timeline.mode(Tween::Mode::ONCE);
@@ -77,18 +89,18 @@ namespace sequencer {
         void add_to_timeline() {
             for (size_t i = 0; i < leds->size(); ++i) {
                 float delay_ms_before;
-                if (b_reverse) {
-                    delay_ms_before = pixel_delay_ms * (leds->size() - 1 - i);
+                if (config.b_reverse) {
+                    delay_ms_before = config.pixel_delay_ms * (leds->size() - 1 - i);
                 } else {
-                    delay_ms_before = pixel_delay_ms * i;
+                    delay_ms_before = config.pixel_delay_ms * i;
                 }
-                float delay_ms_after = total_delay_ms - duration_ms;
+                float delay_ms_after = config.total_delay_ms - config.duration_ms;
 
                 timeline.add((*leds)[i])
                     .offset(delay_ms_before)
                     .init(CRGB::Black)
-                    .then(clr_from)
-                    .then(clr_to, duration_ms)
+                    .then(config.clr_from)
+                    .then(config.clr_to, config.duration_ms)
                     .hold(delay_ms_after);
             }
         }

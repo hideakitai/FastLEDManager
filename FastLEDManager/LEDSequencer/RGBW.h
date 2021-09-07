@@ -12,10 +12,13 @@ namespace led {
 namespace sequencer {
 
     class RGBW : public Sequencer {
+        struct Config {
+            uint32_t duration_ms {0};
+            bool b_repeat {false};
+        } config;
+
         Tween::Timeline timeline;
         CRGB clr {CRGB::Black};
-        uint32_t duration_ms {0};
-        bool b_repeat {false};
 
     public:
         virtual ~RGBW() {}
@@ -24,17 +27,26 @@ namespace sequencer {
         : Sequencer(name) {}
 
         RGBW* duration(const uint32_t ms) {
-            duration_ms = ms;
+            config.duration_ms = ms;
             return this;
         }
 
         RGBW* repeat(bool b) {
-            b_repeat = b;
+            config.b_repeat = b;
             return this;
         }
 
+        RGBW* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
+        }
+
         virtual void enter() override {
-            if (b_repeat) {
+            if (config.b_repeat) {
                 timeline.mode(Tween::Mode::REPEAT_SQ);
             } else {
                 timeline.mode(Tween::Mode::ONCE);
@@ -42,13 +54,13 @@ namespace sequencer {
 
             timeline.add(clr)
                 .then(CRGB::Red)
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB::Green)
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB::Blue)
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB::White)
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB::Black);
 
             timeline.start();
@@ -66,10 +78,13 @@ namespace sequencer {
     };
 
     class RRGGBBWW : public Sequencer {
+        struct Config {
+            uint32_t duration_ms {0};
+            bool b_repeat {false};
+        } config;
+
         Tween::Timeline timeline;
         CRGB clr {CRGB::Black};
-        uint32_t duration_ms {0};
-        bool b_repeat {false};
 
     public:
         virtual ~RRGGBBWW() {}
@@ -78,17 +93,26 @@ namespace sequencer {
         : Sequencer(name) {}
 
         RRGGBBWW* duration(const uint32_t ms) {
-            duration_ms = ms;
+            config.duration_ms = ms;
             return this;
         }
 
         RRGGBBWW* repeat(bool b) {
-            b_repeat = b;
+            config.b_repeat = b;
             return this;
         }
 
+        RRGGBBWW* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
+        }
+
         virtual void enter() override {
-            if (b_repeat) {
+            if (config.b_repeat) {
                 timeline.mode(Tween::Mode::REPEAT_SQ);
             } else {
                 timeline.mode(Tween::Mode::ONCE);
@@ -96,21 +120,21 @@ namespace sequencer {
 
             timeline.add(clr)
                 .then(CRGB(128, 0, 0))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(255, 0, 0))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(0, 128, 0))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(0, 255, 0))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(0, 0, 128))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(0, 0, 255))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(128, 128, 128))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB(255, 255, 255))
-                .hold(duration_ms)
+                .hold(config.duration_ms)
                 .then(CRGB::Black);
 
             timeline.start();

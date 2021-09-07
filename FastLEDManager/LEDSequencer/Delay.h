@@ -12,14 +12,29 @@ namespace led {
 namespace sequencer {
 
     class Delay : public Sequencer {
+        struct Config {
+            uint32_t delay_ms {0};
+        } config;
+
     public:
         virtual ~Delay() {}
 
         Delay(const String& name)
         : Sequencer(name) {}
 
-        void delay(const uint32_t ms) {
-            setDurationMsec(ms);
+        Delay* delay(const uint32_t ms) {
+            config.delay_ms = ms;
+            setDurationMsec(config.delay_ms);
+            return this;
+        }
+
+        Delay* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
         }
 
         virtual void update() override {}

@@ -12,10 +12,12 @@ namespace led {
 namespace sequencer {
 
     class Fill : public Sequencer {
-        CRGB clr {CRGB::Black};
-        size_t idx {0};
-        size_t sz {0};
-        uint8_t fade {0};
+        struct Config {
+            CRGB clr {CRGB::Black};
+            size_t idx {0};
+            size_t sz {0};
+            uint8_t fade {0};
+        } config;
 
     public:
         virtual ~Fill() {}
@@ -24,37 +26,46 @@ namespace sequencer {
         : Sequencer(name) {}
 
         Fill* color(const CRGB& c) {
-            this->clr = c;
-            this->idx = 0;
-            this->sz = this->leds->size();
+            config.clr = c;
+            config.idx = 0;
+            config.sz = this->leds->size();
             return this;
         }
         Fill* color(const CRGB& c, const size_t sz) {
-            this->clr = c;
-            this->idx = 0;
-            this->sz = sz;
+            config.clr = c;
+            config.idx = 0;
+            config.sz = sz;
             return this;
         }
         Fill* color(const CRGB& c, const size_t idx, const size_t sz) {
-            this->clr = c;
-            this->idx = idx;
-            this->sz = sz;
+            config.clr = c;
+            config.idx = idx;
+            config.sz = sz;
             return this;
         }
 
         Fill* fade_by(const uint8_t v) {
-            this->fade = v;
+            config.fade = v;
             return this;
         }
 
+        Fill* configs(const Config& cfg) {
+            config = cfg;
+            return this;
+        }
+
+        const Config& configs() const {
+            return config;
+        }
+
         virtual void enter() override {
-            fill_solid(&(*(this->leds)[idx]), sz, clr);
+            fill_solid(&(*(this->leds)[config.idx]), config.sz, config.clr);
         }
 
         virtual void update() override {
-            fill_solid(&(*(this->leds)[idx]), sz, clr);
-            if (fade) {
-                clr.fadeToBlackBy(fade);
+            fill_solid(&(*(this->leds)[config.idx]), config.sz, config.clr);
+            if (config.fade) {
+                config.clr.fadeToBlackBy(config.fade);
             }
         }
     };
