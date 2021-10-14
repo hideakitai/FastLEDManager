@@ -126,7 +126,7 @@ public:
         if (this->existsSubTask("overwrite")) {
             auto ot = this->getSubTaskByName<sequencer::Sequencer>("overwrite");
             const auto& c = ot->colors();
-            for (size_t i = 0; i < leds.size(); ++i) {
+            for (size_t i = 0; i < num_pixels(); ++i) {
                 if (c[i]) {
                     leds[i] = c[i];
                 }
@@ -135,7 +135,7 @@ public:
 
         // apply gamma
         if (gamma_tbl.gamma() != 1.f) {
-            for (size_t p = 0; p < leds.size(); ++p) {
+            for (size_t p = 0; p < num_pixels(); ++p) {
                 for (size_t c = 0; c < 3; ++c) {
                     leds[p][c] = gamma_tbl[leds[p][c]];
                 }

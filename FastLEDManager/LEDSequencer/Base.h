@@ -46,7 +46,7 @@ namespace sequencer {
         bool attached() const { return (leds != nullptr) && !b_allocated; }
         bool allocated() const { return (leds != nullptr) && b_allocated; }
         bool leds_valid() const { return attached() || allocated(); }
-        size_t size() const { return leds->size(); }
+        size_t size() const { return (size_t)leds->size(); }
 
         virtual void begin() override {}
         virtual void enter() override {}

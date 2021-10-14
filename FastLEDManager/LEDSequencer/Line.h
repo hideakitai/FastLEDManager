@@ -87,7 +87,7 @@ namespace sequencer {
 
     private:
         void add_to_timeline() {
-            for (size_t i = 0; i < leds->size(); ++i) {
+            for (size_t i = 0; i < this->size(); ++i) {
                 float delay_ms_before;
                 if (config.b_reverse) {
                     delay_ms_before = config.pixel_delay_ms * (leds->size() - 1 - i);

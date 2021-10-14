@@ -63,11 +63,11 @@ namespace sequencer {
 
         TweenEach* tween(const std::function<void(Tween::Sequence<CRGB>&, const size_t idx)> setup) {
             if (timelines.empty()) {
-                for (size_t i = 0; i < leds->size(); ++i) {
+                for (size_t i = 0; i < this->size(); ++i) {
                     timelines.emplace_back(Tween::Timeline());
                 }
             }
-            ASSERTM(leds->size() == timelines.size(), "No matching size");
+            ASSERTM(this->size() == timelines.size(), "No matching size");
             for (size_t i = 0; i < timelines.size(); ++i) {
                 auto& seq = timelines[i].add((*leds)[i]);
                 setup(seq, i);
