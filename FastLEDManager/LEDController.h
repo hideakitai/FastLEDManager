@@ -64,8 +64,7 @@ protected:
 public:
     virtual ~Controller() {}
 
-    Controller(const String& name, CPixelView<CRGB>& leds)
-    : Task::Base(name), leds(leds) {}
+    Controller(const String& name, CPixelView<CRGB>& leds) : Task::Base(name), leds(leds) {}
 
     // ---------- TaskManager overloads ----------
 
@@ -246,8 +245,7 @@ private:
         else
             fastled->showLeds(brightness);
 
-        if (config.fade_value != 0)
-            leds.fadeToBlackBy(config.fade_value);
+        if (config.fade_value != 0) leds.fadeToBlackBy(config.fade_value);
     }
 
 public:
@@ -410,14 +408,26 @@ public:
 
     // ---------- Accessor ----------
 
-    CPixelView<CRGB>& get_pixel_view() { return leds; }
-    const CPixelView<CRGB>& get_pixel_view() const { return leds; }
+    CPixelView<CRGB>& get_pixel_view() {
+        return leds;
+    }
+    const CPixelView<CRGB>& get_pixel_view() const {
+        return leds;
+    }
 
-    uint8_t* get_pixel_ptr() { return leds[0].raw; }
-    const uint8_t* get_pixel_ptr() const { return leds[0].raw; }
+    uint8_t* get_pixel_ptr() {
+        return leds[0].raw;
+    }
+    const uint8_t* get_pixel_ptr() const {
+        return leds[0].raw;
+    }
 
-    size_t num_pixels() const { return leds.size(); }
-    size_t num_pixel_bytes() const { return leds.size() * sizeof(CRGB); }
+    size_t num_pixels() const {
+        return leds.size();
+    }
+    size_t num_pixel_bytes() const {
+        return leds.size() * sizeof(CRGB);
+    }
 
     size_t num_active_sequences() const {
         size_t cnt = 0;
@@ -426,8 +436,12 @@ public:
         return cnt;
     }
 
-    bool has_assigned() const { return b_assigned; }
-    bool has_attached() const { return leds_attached != nullptr; }
+    bool has_assigned() const {
+        return b_assigned;
+    }
+    bool has_attached() const {
+        return leds_attached != nullptr;
+    }
 
     template <typename TaskType = Base>
     TaskRef<TaskType> get_sequence(const String& name) const {
@@ -468,28 +482,37 @@ private:
 
 // ---------- Create LEDController ----------
 
-template <ESPIChipsets CHIPSET, size_t N_LEDS, uint8_t DATA_PIN, uint8_t CLOCK_PIN, EOrder RGB_ORDER = RGB, uint32_t SPI_DATA_RATE = DATA_RATE_MHZ(12)>
+template <
+    ESPIChipsets CHIPSET,
+    size_t N_LEDS,
+    uint8_t DATA_PIN,
+    uint8_t CLOCK_PIN,
+    EOrder RGB_ORDER = RGB,
+    uint32_t SPI_DATA_RATE = DATA_RATE_MHZ(12)>
 class SPIController : public Controller {
     CRGBArray<N_LEDS> leds;
 
 public:
     virtual ~SPIController() {}
 
-    SPIController(const String& name)
-    : Controller(name, leds) {
+    SPIController(const String& name) : Controller(name, leds) {
         this->fastled = &FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, RGB_ORDER, SPI_DATA_RATE>(leds, N_LEDS);
     }
 };
 
-template <template <uint8_t DATA_PIN, EOrder RGB_ORDER> class CHIPSET, size_t N_LEDS, uint8_t DATA_PIN, EOrder RGB_ORDER = RGB>
+template <
+    template <uint8_t DATA_PIN, EOrder RGB_ORDER>
+    class CHIPSET,
+    size_t N_LEDS,
+    uint8_t DATA_PIN,
+    EOrder RGB_ORDER = RGB>
 class ClocklessController : public Controller {
     CRGBArray<N_LEDS> leds;
 
 public:
     virtual ~ClocklessController() {}
 
-    ClocklessController(const String& name)
-    : Controller(name, leds) {
+    ClocklessController(const String& name) : Controller(name, leds) {
         this->fastled = &FastLED.addLeds<CHIPSET, DATA_PIN, RGB_ORDER>(leds, N_LEDS);
     }
 };
@@ -498,4 +521,4 @@ public:
 
 using LEDController = led::Controller;
 
-#endif  //ARDUINO_LEDMANAGER_CONTROLLER_H
+#endif  // ARDUINO_LEDMANAGER_CONTROLLER_H

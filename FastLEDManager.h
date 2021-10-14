@@ -80,7 +80,13 @@ public:
 
     // ---------- Create LED Controller ----------
 
-    template <ESPIChipsets CHIPSET, size_t N_LEDS, uint8_t DATA_PIN, uint8_t CLOCK_PIN, EOrder RGB_ORDER = RGB, uint32_t SPI_DATA_RATE = DATA_RATE_MHZ(12)>
+    template <
+        ESPIChipsets CHIPSET,
+        size_t N_LEDS,
+        uint8_t DATA_PIN,
+        uint8_t CLOCK_PIN,
+        EOrder RGB_ORDER = RGB,
+        uint32_t SPI_DATA_RATE = DATA_RATE_MHZ(12)>
     Controller& add(const String& name) {
         auto task = Tasks.add<SPIController<CHIPSET, N_LEDS, DATA_PIN, CLOCK_PIN, RGB_ORDER, SPI_DATA_RATE>>(name);
         tasks.emplace_back(task);
@@ -88,7 +94,12 @@ public:
         return *(task.get());
     }
 
-    template <template <uint8_t DATA_PIN, EOrder RGB_ORDER> class CHIPSET, size_t N_LEDS, uint8_t DATA_PIN, EOrder RGB_ORDER = RGB>
+    template <
+        template <uint8_t DATA_PIN, EOrder RGB_ORDER>
+        class CHIPSET,
+        size_t N_LEDS,
+        uint8_t DATA_PIN,
+        EOrder RGB_ORDER = RGB>
     Controller& add(const String& name) {
         auto task = Tasks.add<ClocklessController<CHIPSET, N_LEDS, DATA_PIN, RGB_ORDER>>(name);
         tasks.emplace_back(task);
@@ -162,8 +173,7 @@ public:
     Manager& delay(const uint32_t ms) {
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us) {
-            for (auto& t : tasks)
-                Tasks.update(t->getName());
+            for (auto& t : tasks) Tasks.update(t->getName());
         }
         return *this;
     }

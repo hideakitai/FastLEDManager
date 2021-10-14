@@ -21,8 +21,7 @@ namespace sequencer {
     public:
         virtual ~Flash() {}
 
-        Flash(const String& name)
-        : Sequencer(name) {}
+        Flash(const String& name) : Sequencer(name) {}
 
         Flash* color(const CRGB& clr) {
             config.target_clr = clr;
@@ -69,4 +68,4 @@ namespace sequencer {
 }  // namespace sequencer
 }  // namespace led
 
-#endif  //ARDUINO_LEDMANAGER_LEDSEQUENCER_FLASH_H
+#endif  // ARDUINO_LEDMANAGER_LEDSEQUENCER_FLASH_H

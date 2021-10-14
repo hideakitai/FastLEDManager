@@ -20,8 +20,7 @@ namespace sequencer {
     public:
         virtual ~Progress() {}
 
-        Progress(const String& name)
-        : Sequencer(name) {}
+        Progress(const String& name) : Sequencer(name) {}
 
         Progress* color(const CRGB& c) {
             config.clr = c;

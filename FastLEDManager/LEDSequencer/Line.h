@@ -27,8 +27,7 @@ namespace sequencer {
     public:
         virtual ~Line() {}
 
-        Line(const String& name)
-        : Sequencer(name) {}
+        Line(const String& name) : Sequencer(name) {}
 
         Line* color(const CRGB& clr) {
             config.clr_from = clr;

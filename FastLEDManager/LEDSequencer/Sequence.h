@@ -15,8 +15,7 @@ namespace sequencer {
     public:
         virtual ~Sequence() {}
 
-        Sequence(const String& name)
-        : Sequencer(name) {}
+        Sequence(const String& name) : Sequencer(name) {}
 
         virtual void enter() override {
             leds->fill_solid(CRGB::Black);
@@ -84,9 +83,7 @@ namespace sequencer {
         }
 
         Sequence* hold(const double sec) {
-            this->Sequencer::then<Delay>("", sec, [&](TaskRef<Delay> t) {
-                t->delay(sec * 1000.);
-            });
+            this->Sequencer::then<Delay>("", sec, [&](TaskRef<Delay> t) { t->delay(sec * 1000.); });
             return this;
         }
     };

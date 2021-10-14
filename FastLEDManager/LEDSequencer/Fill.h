@@ -22,8 +22,7 @@ namespace sequencer {
     public:
         virtual ~Fill() {}
 
-        Fill(const String& name)
-        : Sequencer(name) {}
+        Fill(const String& name) : Sequencer(name) {}
 
         Fill* color(const CRGB& c) {
             config.clr = c;

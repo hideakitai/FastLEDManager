@@ -25,8 +25,7 @@ namespace sequencer {
             raw_leds = nullptr;
         }
 
-        Sequencer(const String& name)
-        : Task::Base(name) {}
+        Sequencer(const String& name) : Task::Base(name) {}
 
         void attach(CPixelView<CRGB>& led_arr) {
             raw_leds = nullptr;
@@ -41,12 +40,24 @@ namespace sequencer {
             leds->fill_solid(CRGB::Black);
         }
 
-        CPixelView<CRGB>& colors() { return *leds; }
-        const CPixelView<CRGB>& colors() const { return *leds; }
-        bool attached() const { return (leds != nullptr) && !b_allocated; }
-        bool allocated() const { return (leds != nullptr) && b_allocated; }
-        bool leds_valid() const { return attached() || allocated(); }
-        size_t size() const { return (size_t)leds->size(); }
+        CPixelView<CRGB>& colors() {
+            return *leds;
+        }
+        const CPixelView<CRGB>& colors() const {
+            return *leds;
+        }
+        bool attached() const {
+            return (leds != nullptr) && !b_allocated;
+        }
+        bool allocated() const {
+            return (leds != nullptr) && b_allocated;
+        }
+        bool leds_valid() const {
+            return attached() || allocated();
+        }
+        size_t size() const {
+            return (size_t)leds->size();
+        }
 
         virtual void begin() override {}
         virtual void enter() override {}

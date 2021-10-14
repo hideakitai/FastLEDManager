@@ -21,8 +21,7 @@ namespace sequencer {
     public:
         virtual ~Triangle() {}
 
-        Triangle(const String& name)
-        : Sequencer(name) {}
+        Triangle(const String& name) : Sequencer(name) {}
 
         Triangle* color(const CRGB& clr) {
             config.target_clr = clr;

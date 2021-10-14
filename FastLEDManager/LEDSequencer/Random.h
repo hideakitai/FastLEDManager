@@ -24,8 +24,7 @@ namespace sequencer {
     public:
         virtual ~Random() {}
 
-        Random(const String& name)
-        : Sequencer(name) {}
+        Random(const String& name) : Sequencer(name) {}
 
         Random* range(const size_t idx, const size_t sz) {
             config.index = idx;
@@ -77,8 +76,7 @@ namespace sequencer {
                     (*leds)[idx] = config.clr;
                 }
             }
-            if (config.fade_value != 0)
-                leds->fadeToBlackBy(config.fade_value);
+            if (config.fade_value != 0) leds->fadeToBlackBy(config.fade_value);
         }
 
         virtual void exit() override {

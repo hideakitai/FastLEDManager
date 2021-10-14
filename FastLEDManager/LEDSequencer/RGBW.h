@@ -23,8 +23,7 @@ namespace sequencer {
     public:
         virtual ~RGBW() {}
 
-        RGBW(const String& name)
-        : Sequencer(name) {}
+        RGBW(const String& name) : Sequencer(name) {}
 
         RGBW* duration(const uint32_t ms) {
             config.duration_ms = ms;
@@ -89,8 +88,7 @@ namespace sequencer {
     public:
         virtual ~RRGGBBWW() {}
 
-        RRGGBBWW(const String& name)
-        : Sequencer(name) {}
+        RRGGBBWW(const String& name) : Sequencer(name) {}
 
         RRGGBBWW* duration(const uint32_t ms) {
             config.duration_ms = ms;

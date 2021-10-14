@@ -18,8 +18,7 @@ namespace sequencer {
     public:
         virtual ~TweenSolid() {}
 
-        TweenSolid(const String& name)
-        : Sequencer(name) {}
+        TweenSolid(const String& name) : Sequencer(name) {}
 
         TweenSolid* tween(const std::function<void(Tween::Sequence<CRGB>&)> setup) {
             auto& seq = timeline.add(clr);
@@ -58,8 +57,7 @@ namespace sequencer {
     public:
         virtual ~TweenEach() {}
 
-        TweenEach(const String& name)
-        : Sequencer(name) {}
+        TweenEach(const String& name) : Sequencer(name) {}
 
         TweenEach* tween(const std::function<void(Tween::Sequence<CRGB>&, const size_t idx)> setup) {
             if (timelines.empty()) {

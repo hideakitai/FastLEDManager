@@ -29,10 +29,18 @@ namespace sequencer {
             return m;
         }
 
-        void add_count() { ++ref_count; }
-        void sub_count() { --ref_count; }
-        size_t use_count() const { return ref_count; }
-        CRGB color() const { return CRGB(clr[0], clr[1], clr[2]); }
+        void add_count() {
+            ++ref_count;
+        }
+        void sub_count() {
+            --ref_count;
+        }
+        size_t use_count() const {
+            return ref_count;
+        }
+        CRGB color() const {
+            return CRGB(clr[0], clr[1], clr[2]);
+        }
 
         void enter() {
             for (size_t i = 0; i < 3; ++i) {
@@ -50,8 +58,7 @@ namespace sequencer {
         }
 
         void exit() {
-            for (size_t i = 0; i < 3; ++i)
-                timeline[i].clear();
+            for (size_t i = 0; i < 3; ++i) timeline[i].clear();
         }
 
     private:
@@ -64,8 +71,7 @@ namespace sequencer {
 
     class MoodMachine : public Sequencer {
     public:
-        MoodMachine(const String& name)
-        : Sequencer(name) {
+        MoodMachine(const String& name) : Sequencer(name) {
             MoodMachineTimeline::get().add_count();
         }
 

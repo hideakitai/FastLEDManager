@@ -19,8 +19,7 @@ namespace sequencer {
     public:
         virtual ~Delay() {}
 
-        Delay(const String& name)
-        : Sequencer(name) {}
+        Delay(const String& name) : Sequencer(name) {}
 
         Delay* delay(const uint32_t ms) {
             config.delay_ms = ms;
