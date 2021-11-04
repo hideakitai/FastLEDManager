@@ -16,6 +16,7 @@ My FastLED Manager that can generate multiple sequences with layered (mixed) out
 - [FastLED](https://github.com/FastLED/FastLED)
 - [TaskManager](https://github.com/hideakitai/TaskManager)
 - [Tween](https://github.com/hideakitai/Tween)
+- [DebugLog](https://github.com/hideakitai/DebugLog)
 - [GammaTable](https://github.com/hideakitai/GammaTable)
 
 ## Overview
@@ -240,35 +241,35 @@ Controller& fill_solid(const CRGB& c, const size_t idx, const size_t sz);
 
 // single sequence
 TaskRef<sequencer::Fill> fill();
-TaskRef<sequencer::Fill> fill(const String& name);
+TaskRef<sequencer::Fill> fill(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::Flash> flash();
-TaskRef<sequencer::Flash> flash(const String& name);
+TaskRef<sequencer::Flash> flash(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::Line> line();
-TaskRef<sequencer::Line> line(const String& name);
+TaskRef<sequencer::Line> line(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::MoodMachine> mood_machine();
-TaskRef<sequencer::MoodMachine> mood_machine(const String& name);
+TaskRef<sequencer::MoodMachine> mood_machine(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::Progress> progress();
-TaskRef<sequencer::Progress> progress(const String& name);
+TaskRef<sequencer::Progress> progress(const String& name, const bool b_auto_erase = true);
 sequencer::Progress* progress_ratio(const String& name, const float rate);
 sequencer::Progress* progress_percent(const String& name, const float percent);
 TaskRef<sequencer::Random> random();
-TaskRef<sequencer::Random> random(const String& name);
+TaskRef<sequencer::Random> random(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::RGBW> rgbw();
-TaskRef<sequencer::RGBW> rgbw(const String& name);
+TaskRef<sequencer::RGBW> rgbw(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::RRGGBBWW> rrggbbww();
-TaskRef<sequencer::RRGGBBWW> rrggbbww(const String& name);
+TaskRef<sequencer::RRGGBBWW> rrggbbww(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::Triangle> triangle();
-TaskRef<sequencer::Triangle> triangle(const String& name);
+TaskRef<sequencer::Triangle> triangle(const String& name, const bool b_auto_erase = true);
 
 // sequence of sequence
 TaskRef<sequencer::Sequence> sequence();
-TaskRef<sequencer::Sequence> sequence(const String& name);
+TaskRef<sequencer::Sequence> sequence(const String& name, const bool b_auto_erase = true);
 
 // led tween
 TaskRef<sequencer::TweenSolid> tween_solid();
-TaskRef<sequencer::TweenSolid> tween_solid(const String& name);
+TaskRef<sequencer::TweenSolid> tween_solid(const String& name, const bool b_auto_erase = true);
 TaskRef<sequencer::TweenEach> tween_each();
-TaskRef<sequencer::TweenEach> tween_each(const String& name);
+TaskRef<sequencer::TweenEach> tween_each(const String& name, const bool b_auto_erase = true);
 
 // overwrite output
 template <typename TaskType> TaskRef<TaskType> overwrite();
@@ -333,7 +334,21 @@ struct Config {
 ### Fill
 
 ```C++
-// Mainly used in sequence()
+#include <FastLEDManager.h>
+
+void setup() {
+    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+        .startFps(120);
+
+    $LED["WS2812"]
+        .fill()
+        ->color(CRGB::Red)
+        ->startFpsForSec(30, 10);
+}
+
+void loop() {
+    Tasks.update();
+}
 ```
 
 ```C++
