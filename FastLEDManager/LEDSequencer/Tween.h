@@ -46,7 +46,6 @@ namespace sequencer {
         }
 
         virtual void exit() override {
-            timeline.clear();
             leds->fill_solid(CRGB::Black);
         }
     };
@@ -92,8 +91,6 @@ namespace sequencer {
         }
 
         virtual void exit() override {
-            for (auto& tl : timelines) tl.clear();
-            timelines.clear();
             leds->fill_solid(CRGB::Black);
         }
     };
