@@ -314,36 +314,36 @@ public:
     TaskRef<sequencer::Fill> fill() {
         return fill("");
     }
-    TaskRef<sequencer::Fill> fill(const String& name) {
-        return create_sequence<sequencer::Fill>(name);
+    TaskRef<sequencer::Fill> fill(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Fill>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::Flash> flash() {
         return flash("");
     }
-    TaskRef<sequencer::Flash> flash(const String& name) {
-        return create_sequence<sequencer::Flash>(name);
+    TaskRef<sequencer::Flash> flash(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Flash>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::Line> line() {
         return line("");
     }
-    TaskRef<sequencer::Line> line(const String& name) {
-        return create_sequence<sequencer::Line>(name);
+    TaskRef<sequencer::Line> line(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Line>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::MoodMachine> mood_machine() {
         return mood_machine("");
     }
-    TaskRef<sequencer::MoodMachine> mood_machine(const String& name) {
-        return create_sequence<sequencer::MoodMachine>(name);
+    TaskRef<sequencer::MoodMachine> mood_machine(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::MoodMachine>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::Progress> progress() {
         return progress("");
     }
-    TaskRef<sequencer::Progress> progress(const String& name) {
-        return create_sequence<sequencer::Progress>(name);
+    TaskRef<sequencer::Progress> progress(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Progress>(name, b_auto_erase);
     }
     sequencer::Progress* progress_ratio(const String& name, const float rate) {
         return get_sequence<sequencer::Progress>(name)->ratio(rate);
@@ -355,50 +355,50 @@ public:
     TaskRef<sequencer::Random> random() {
         return random("");
     }
-    TaskRef<sequencer::Random> random(const String& name) {
-        return create_sequence<sequencer::Random>(name);
+    TaskRef<sequencer::Random> random(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Random>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::RGBW> rgbw() {
         return rgbw("");
     }
-    TaskRef<sequencer::RGBW> rgbw(const String& name) {
-        return create_sequence<sequencer::RGBW>(name);
+    TaskRef<sequencer::RGBW> rgbw(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::RGBW>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::RRGGBBWW> rrggbbww() {
         return rrggbbww("");
     }
-    TaskRef<sequencer::RRGGBBWW> rrggbbww(const String& name) {
-        return create_sequence<sequencer::RRGGBBWW>(name);
+    TaskRef<sequencer::RRGGBBWW> rrggbbww(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::RRGGBBWW>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::Triangle> triangle() {
         return triangle("");
     }
-    TaskRef<sequencer::Triangle> triangle(const String& name) {
-        return create_sequence<sequencer::Triangle>(name);
+    TaskRef<sequencer::Triangle> triangle(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Triangle>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::Sequence> sequence() {
         return sequence("");
     }
-    TaskRef<sequencer::Sequence> sequence(const String& name) {
-        return create_sequence<sequencer::Sequence>(name);
+    TaskRef<sequencer::Sequence> sequence(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::Sequence>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::TweenSolid> tween_solid() {
         return tween_solid("");
     }
-    TaskRef<sequencer::TweenSolid> tween_solid(const String& name) {
-        return create_sequence<sequencer::TweenSolid>(name);
+    TaskRef<sequencer::TweenSolid> tween_solid(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::TweenSolid>(name, b_auto_erase);
     }
 
     TaskRef<sequencer::TweenEach> tween_each() {
         return tween_each("");
     }
-    TaskRef<sequencer::TweenEach> tween_each(const String& name) {
-        return create_sequence<sequencer::TweenEach>(name);
+    TaskRef<sequencer::TweenEach> tween_each(const String& name, const bool b_auto_erase = true) {
+        return create_sequence<sequencer::TweenEach>(name, b_auto_erase);
     }
 
     template <typename TaskType>
@@ -461,22 +461,21 @@ public:
 
 private:
     template <typename SequenceType>
-    TaskRef<SequenceType> create_sequence(const String& name) {
+    TaskRef<SequenceType> create_sequence(const String& name, const bool b_auto_erase) {
         this->subtask<SequenceType>(name, [](TaskRef<SequenceType>) {});
         auto task = this->getSubTaskByIndex<SequenceType>(this->numSubTasks() - 1);
-        assign_leds_to_task(task);
+        assign_leds_to_task(task, b_auto_erase);
         return task;
     }
 
     template <typename T>
-    void assign_leds_to_task(T& task) {
+    void assign_leds_to_task(T& task, const bool b_auto_erase) {
         if (config.b_layered) {
             task->allocate(leds.size());
         } else {
             task->attach(leds);
         }
-        // erase sequence if stopped by default
-        task->setAutoErase(true);
+        task->setAutoErase(b_auto_erase);
     }
 };
 
