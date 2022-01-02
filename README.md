@@ -182,10 +182,10 @@ Manager& multi_core_config(const uint8_t core, const uint32_t stack_size, const 
 
 // drive leds with current led buffer immediately
 Manager& show(const uint8_t brightness = 0);
-/// Run all sequence and block program
-Manager& spin(const uint32_t ms);
 /// show current color once and hold it until timeout
 Manager& delay(const uint32_t ms);
+/// Run all sequence and block program
+Manager& spin(const uint32_t ms);
 // set assigned flag not to clear the output buffer
 Manager& assign(const bool b);
 // fill led buffer immediately
@@ -221,8 +221,8 @@ const Config& configs() const;
 // ---------- LED Control ----------
 
 Controller& show(const uint8_t brightness = 0);
-Controller& spin(const uint32_t ms);
 Controller& delay(const uint32_t ms);
+Controller& spin(const uint32_t ms);
 
 Controller& attach(CPixelView<CRGB>* led);
 template <typename PixelType = CRGB>

@@ -169,21 +169,21 @@ public:
         return *this;
     }
 
-    /// Run all sequence and block program
-    Manager& spin(const uint32_t ms) {
-        const uint64_t end_us = micros() + uint64_t(ms) * 1000;
-        while (micros() < end_us) {
-            for (auto& t : tasks) Tasks.update(t->getName());
-        }
-        return *this;
-    }
-
     /// show current color once and hold it until timeout
     Manager& delay(const uint32_t ms) {
         show();
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us)
             ;
+        return *this;
+    }
+
+    /// Run all sequence and block program
+    Manager& spin(const uint32_t ms) {
+        const uint64_t end_us = micros() + uint64_t(ms) * 1000;
+        while (micros() < end_us) {
+            for (auto& t : tasks) Tasks.update(t->getName());
+        }
         return *this;
     }
 

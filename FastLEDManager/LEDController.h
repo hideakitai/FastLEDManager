@@ -249,21 +249,21 @@ private:
     }
 
 public:
-    /// Run all sequence and block program
-    Controller& spin(const uint32_t ms) {
-        const uint64_t end_us = micros() + uint64_t(ms) * 1000;
-        while (micros() < end_us) {
-            Tasks.update(this->getName());
-        }
-        return *this;
-    }
-
     /// show current color once and hold it until timeout
     Controller& delay(const uint32_t ms) {
         show();
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us)
             ;
+        return *this;
+    }
+
+    /// Run all sequence and block program
+    Controller& spin(const uint32_t ms) {
+        const uint64_t end_us = micros() + uint64_t(ms) * 1000;
+        while (micros() < end_us) {
+            Tasks.update(this->getName());
+        }
         return *this;
     }
 
