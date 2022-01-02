@@ -250,7 +250,7 @@ private:
 
 public:
     /// Run all sequence and block program
-    Controller& delay(const uint32_t ms) {
+    Controller& spin(const uint32_t ms) {
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us) {
             Tasks.update(this->getName());

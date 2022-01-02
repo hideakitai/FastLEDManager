@@ -17,7 +17,7 @@ void setup() {
         ->startFpsForSec(30, 5);
 
     // block program but runs sequence in background
-    $LED["WS2812"].delay(5000);
+    $LED["WS2812"].spin(5000);
 
     $LED["WS2812"]
         .rrggbbww()
@@ -26,7 +26,7 @@ void setup() {
         ->startFpsForSec(30, 8);
 
     // block program but runs sequence in background
-    $LED["WS2812"].delay(9000);
+    $LED["WS2812"].spin(9000);
 }
 
 void loop() {

@@ -183,7 +183,7 @@ Manager& multi_core_config(const uint8_t core, const uint32_t stack_size, const 
 // drive leds with current led buffer immediately
 Manager& show(const uint8_t brightness = 0);
 /// Run all sequence and block program
-Manager& delay(const uint32_t ms);
+Manager& spin(const uint32_t ms);
 /// show current color once and hold it until timeout
 Manager& hold(const uint32_t ms);
 // set assigned flag not to clear the output buffer
@@ -221,7 +221,7 @@ const Config& configs() const;
 // ---------- LED Control ----------
 
 Controller& show(const uint8_t brightness = 0);
-Controller& delay(const uint32_t ms);
+Controller& spin(const uint32_t ms);
 Controller& hold(const uint32_t ms);
 
 Controller& attach(CPixelView<CRGB>* led);
@@ -322,7 +322,7 @@ Please see examples for detals.
 ```
 
 ```C++
-void delay(const uint32_t ms);
+void spin(const uint32_t ms);
 Delay* configs(const Config& cfg);
 const Config& configs() const;
 
@@ -573,7 +573,7 @@ void setup() {
         ->startFpsForSec(30, 5);
 
     // block program but runs sequence in background
-    $LED["WS2812"].delay(5000);
+    $LED["WS2812"].spin(5000);
 }
 
 void loop() {
@@ -609,7 +609,7 @@ void setup() {
         ->startFpsForSec(30, 8);
 
     // block program but runs sequence in background
-    $LED["WS2812"].delay(9000);
+    $LED["WS2812"].spin(9000);
 }
 
 void loop() {

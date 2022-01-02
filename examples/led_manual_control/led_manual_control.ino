@@ -32,18 +32,18 @@ void setup() {
     // Another way to handle it is to disable layer first
     // If layer is enabled, output buffer is cleared every frame
     // to accumlate all tasks pixels into output buffer
-    // delay() blocks program but led tasks continue to run in the background
+    // spin() blocks program but led tasks continue to run in the background
     $LED["WS2812"].layer(false);
     leds.fill_solid(CRGB::Black);
-    $LED.delay(1000);
+    $LED.spin(1000);
     leds.fill_solid(CRGB::Red);
-    $LED.delay(1000);
+    $LED.spin(1000);
     leds.fill_solid(CRGB::Green);
-    $LED.delay(1000);
+    $LED.spin(1000);
     leds.fill_solid(CRGB::Blue);
-    $LED.delay(1000);
+    $LED.spin(1000);
     leds.fill_solid(CRGB::White);
-    $LED.delay(1000);
+    $LED.spin(1000);
     leds.fill_solid(CRGB::Black);
     $LED.show();
 }

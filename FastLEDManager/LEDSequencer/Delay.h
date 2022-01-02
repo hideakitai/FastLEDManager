@@ -21,7 +21,7 @@ namespace sequencer {
 
         Delay(const String& name) : Sequencer(name) {}
 
-        Delay* delay(const uint32_t ms) {
+        Delay* spin(const uint32_t ms) {
             config.delay_ms = ms;
             setDurationMsec(config.delay_ms);
             return this;

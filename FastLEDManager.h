@@ -170,7 +170,7 @@ public:
     }
 
     /// Run all sequence and block program
-    Manager& delay(const uint32_t ms) {
+    Manager& spin(const uint32_t ms) {
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us) {
             for (auto& t : tasks) Tasks.update(t->getName());
