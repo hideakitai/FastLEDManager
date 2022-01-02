@@ -14,18 +14,18 @@ void setup() {
     // This is almost same as CRGBArray<N_LEDS>
     auto& leds = $LED["WS2812"].get_pixel_view();
 
-    // One way to handle led buffer manually is to call hold()
-    // hold() shows current led buffer once and suspend program
+    // One way to handle led buffer manually is to call delay()
+    // delay() shows current led buffer once and suspend program
     leds.fill_solid(CRGB::Black);
-    $LED.hold(1000);
+    $LED.delay(1000);
     leds.fill_solid(CRGB::Red);
-    $LED.hold(1000);
+    $LED.delay(1000);
     leds.fill_solid(CRGB::Green);
-    $LED.hold(1000);
+    $LED.delay(1000);
     leds.fill_solid(CRGB::Blue);
-    $LED.hold(1000);
+    $LED.delay(1000);
     leds.fill_solid(CRGB::White);
-    $LED.hold(1000);
+    $LED.delay(1000);
     leds.fill_solid(CRGB::Black);
     $LED.show();
 

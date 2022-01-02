@@ -86,15 +86,15 @@ void setup() {
 
     // Blocking LED control
     $LED.fill_solid(CRGB::Black)  // fill_solid to all led stripes
-        .hold(500)                // show current buffer and suspend
+        .delay(500)                // show current buffer and suspend
         .fill_solid(CRGB::Red)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::Green)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::Blue)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::White)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::Black)
         .show();
 }
@@ -185,7 +185,7 @@ Manager& show(const uint8_t brightness = 0);
 /// Run all sequence and block program
 Manager& spin(const uint32_t ms);
 /// show current color once and hold it until timeout
-Manager& hold(const uint32_t ms);
+Manager& delay(const uint32_t ms);
 // set assigned flag not to clear the output buffer
 Manager& assign(const bool b);
 // fill led buffer immediately
@@ -222,7 +222,7 @@ const Config& configs() const;
 
 Controller& show(const uint8_t brightness = 0);
 Controller& spin(const uint32_t ms);
-Controller& hold(const uint32_t ms);
+Controller& delay(const uint32_t ms);
 
 Controller& attach(CPixelView<CRGB>* led);
 template <typename PixelType = CRGB>

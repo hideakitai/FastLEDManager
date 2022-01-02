@@ -12,15 +12,15 @@ void setup() {
 
     // Blocking LED control
     $LED.fill_solid(CRGB::Black)  // fill_solid to all led stripes
-        .hold(500)                // show current buffer and suspend
+        .delay(500)                // show current buffer and suspend
         .fill_solid(CRGB::Red)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::Green)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::Blue)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::White)
-        .hold(500)
+        .delay(500)
         .fill_solid(CRGB::Black)
         .show();
 

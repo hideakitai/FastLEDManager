@@ -259,7 +259,7 @@ public:
     }
 
     /// show current color once and hold it until timeout
-    Controller& hold(const uint32_t ms) {
+    Controller& delay(const uint32_t ms) {
         show();
         const uint64_t end_us = micros() + uint64_t(ms) * 1000;
         while (micros() < end_us)
