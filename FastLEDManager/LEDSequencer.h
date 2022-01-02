@@ -7,7 +7,7 @@
 #include <Tween.h>
 
 #include "LEDSequencer/Base.h"
-#include "LEDSequencer/Delay.h"
+#include "LEDSequencer/Spin.h"
 #include "LEDSequencer/Fill.h"
 #include "LEDSequencer/Flash.h"
 #include "LEDSequencer/Line.h"
