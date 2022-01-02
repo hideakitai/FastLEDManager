@@ -327,7 +327,7 @@ Spin* configs(const Config& cfg);
 const Config& configs() const;
 
 struct Config {
-    uint32_t delay_ms {0};
+    uint32_t spin_ms {0};
 };
 ```
 

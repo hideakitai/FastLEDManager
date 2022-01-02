@@ -13,7 +13,7 @@ namespace sequencer {
 
     class Spin : public Sequencer {
         struct Config {
-            uint32_t delay_ms {0};
+            uint32_t spin_ms {0};
         } config;
 
     public:
@@ -22,8 +22,8 @@ namespace sequencer {
         Spin(const String& name) : Sequencer(name) {}
 
         Spin* spin(const uint32_t ms) {
-            config.delay_ms = ms;
-            setDurationMsec(config.delay_ms);
+            config.spin_ms = ms;
+            setDurationMsec(config.spin_ms);
             return this;
         }
 
