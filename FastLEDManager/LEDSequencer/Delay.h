@@ -11,23 +11,23 @@
 namespace led {
 namespace sequencer {
 
-    class Delay : public Sequencer {
+    class Spin : public Sequencer {
         struct Config {
             uint32_t delay_ms {0};
         } config;
 
     public:
-        virtual ~Delay() {}
+        virtual ~Spin() {}
 
-        Delay(const String& name) : Sequencer(name) {}
+        Spin(const String& name) : Sequencer(name) {}
 
-        Delay* spin(const uint32_t ms) {
+        Spin* spin(const uint32_t ms) {
             config.delay_ms = ms;
             setDurationMsec(config.delay_ms);
             return this;
         }
 
-        Delay* configs(const Config& cfg) {
+        Spin* configs(const Config& cfg) {
             config = cfg;
             return this;
         }

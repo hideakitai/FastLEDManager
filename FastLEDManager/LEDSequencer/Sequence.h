@@ -82,8 +82,8 @@ namespace sequencer {
             return this;
         }
 
-        Sequence* hold(const double sec) {
-            this->Sequencer::then<Delay>("", sec, [&](TaskRef<Delay> t) { t->spin(sec * 1000.); });
+        Sequence* spin(const double sec) {
+            this->Sequencer::then<Spin>("", sec, [&](TaskRef<Spin> t) { t->spin(sec * 1000.); });
             return this;
         }
     };

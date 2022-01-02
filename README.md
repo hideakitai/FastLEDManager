@@ -315,7 +315,7 @@ template <typename TaskType = Base> TaskRef<TaskType> get_sequence_by_index(cons
 
 Please see examples for detals.
 
-### Delay
+### Spin
 
 ```C++
 // Mainly used in sequence()
@@ -323,7 +323,7 @@ Please see examples for detals.
 
 ```C++
 void spin(const uint32_t ms);
-Delay* configs(const Config& cfg);
+Spin* configs(const Config& cfg);
 const Config& configs() const;
 
 struct Config {
@@ -755,7 +755,7 @@ Sequence* then(const double sec, const std::function<void(TaskRef<TaskType>)>& s
 template <typename TaskType>
 Sequence* then(const String& name, const double sec, const std::function<void(TaskRef<TaskType>)>& setup);
 
-Sequence* hold(const double sec);
+Sequence* spin(const double sec);
 ```
 
 ### Sequence Sync
@@ -813,9 +813,9 @@ void setup() {
         .sequence("Sequence")  // create a series of sequences
         ->then<Fill>("Black", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
         ->then<Fill>("Red", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Red); })
-        ->hold(1)
+        ->spin(1)
         ->then<Fill>("Green", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Green); })
-        ->hold(1)
+        ->spin(1)
         ->then<Fill>("Blue", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Blue); })
         ->then<Fill>("White", 1, [&](TaskRef<Fill> t) { t->color(CRGB::White); })
         ->then<Fill>("Black2", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
