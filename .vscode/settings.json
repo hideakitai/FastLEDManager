@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "charconv": "cpp",
+        "iterator": "cpp",
+        "string": "cpp",
+        "xmemory": "cpp"
+    }
+}

@@ -81,11 +81,11 @@ TBD : Divide one LED stripe into several parts and control them respectively.
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
     // Blocking LED control
-    $LED.fill_solid(CRGB::Black)  // fill_solid to all led stripes
+    LEDMNGR.fill_solid(CRGB::Black)  // fill_solid to all led stripes
         .delay(500)                // show current buffer and suspend
         .fill_solid(CRGB::Red)
         .delay(500)
@@ -117,7 +117,7 @@ void loop() {
 
 void setup() {
     // These are the default configs
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .brightness(255)
         .dither(BINARY_DITHER)
         .correction(CRGB::White)
@@ -131,7 +131,7 @@ void setup() {
         // finally start controller at 120 fps
         .startFps(120);
 
-    $LED.add<SK6812, N_LEDS, PIN_SK6812_DATA, GRB>("SK6812")
+    LEDMNGR.add<SK6812, N_LEDS, PIN_SK6812_DATA, GRB>("SK6812")
         .brightness(128)
         .dither(BINARY_DITHER)
         .correction(CRGB::White)
@@ -142,7 +142,7 @@ void setup() {
         .startFps(120);
 
     These are the default configs
-    $LED.add<APA102, N_LEDS, PIN_APA102_DATA, PIN_APA102_CLK, BGR, DATA_RATE_MHZ(12)>("APA102", 120)
+    LEDMNGR.add<APA102, N_LEDS, PIN_APA102_DATA, PIN_APA102_CLK, BGR, DATA_RATE_MHZ(12)>("APA102", 120)
        .brightness(192)
        .dither(BINARY_DITHER)
        .correction(CRGB::White)
@@ -337,10 +337,10 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .fill()
         ->color(CRGB::Red)
         ->startFpsForSec(30, 10);
@@ -373,10 +373,10 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .flash()
         ->color(CRGB::Red)
         ->cycle_ms(1000)
@@ -410,10 +410,10 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .line()
         ->color(CRGB::Blue)
         ->pixel_delay(100)
@@ -454,10 +454,10 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .mood_machine()
         ->startFpsForFrame(30, 30 * 20);
 }
@@ -477,10 +477,10 @@ void loop() {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .progress("Progress")
         ->color(CRGB::Blue)
         ->ratio(0.)
@@ -493,8 +493,8 @@ void loop() {
     static uint32_t start_ms = millis();
     float percent = (float)(millis() - start_ms) / 10000.f * 100.f;
 
-    if ($LED["WS2812"]["Progress"])
-        $LED["WS2812"].progress_percent("Progress", percent);
+    if (LEDMNGR["WS2812"]["Progress"])
+        LEDMNGR["WS2812"].progress_percent("Progress", percent);
 }
 ```
 
@@ -520,10 +520,10 @@ void setup() {
     Serial.begin(115200);
     delay(2000);
 
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .random()
         ->range(0, N_LEDS)
         ->color(CRGB::White)
@@ -563,17 +563,17 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .rgbw()
         ->duration(1000)
         ->repeat(false)
         ->startFpsForSec(30, 5);
 
     // block program but runs sequence in background
-    $LED["WS2812"].spin(5000);
+    LEDMNGR["WS2812"].spin(5000);
 }
 
 void loop() {
@@ -599,17 +599,17 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .rrggbbww()
         ->duration(1000)
         ->repeat(false)
         ->startFpsForSec(30, 8);
 
     // block program but runs sequence in background
-    $LED["WS2812"].spin(9000);
+    LEDMNGR["WS2812"].spin(9000);
 }
 
 void loop() {
@@ -635,10 +635,10 @@ struct Config {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .triangle()
         ->color(CRGB::Green)
         ->cycle_ms(1000)
@@ -676,10 +676,10 @@ CRGBArray<N_LEDS> b;
 CRGBArray<N_LEDS> w;
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .tween_each()
         ->tween([&](Tween::Sequence<CRGB>& seq, const size_t i) {
             seq.then(r[i], 2000)
@@ -710,10 +710,10 @@ TweenEach* mode(const Tween::Mode m);
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .tween_solid()
         ->tween([&](Tween::Sequence<CRGB>& seq) {
             seq.then(CRGB::Red, 2000)
@@ -764,11 +764,11 @@ Sequence* spin(const double sec);
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
     using namespace LEDSequence;
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .sequence()
         ->sync<Fill>([&](TaskRef<Fill> t) {
             t->color(CRGB(32, 0, 0));
@@ -805,11 +805,11 @@ void loop() {
 #include <FastLEDManager.h>
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
     using namespace LEDSequence;
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .sequence("Sequence")  // create a series of sequences
         ->then<Fill>("Black", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
         ->then<Fill>("Red", 1, [&](TaskRef<Fill> t) { t->color(CRGB::Red); })
@@ -835,11 +835,11 @@ void loop() {
 CRGBArray<N_LEDS> rgb;
 
 void setup() {
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
     using namespace LEDSequence;
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .sequence("sq")  // create a series of sequences
         ->then<Fill>(1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
         ->then<Fill>(2, [&](TaskRef<Fill> t) { t->color(CRGB(64, 0, 0)); })
@@ -849,7 +849,7 @@ void setup() {
         ->then<Fill>(1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
         ->startFpsForSec(30, 10., true);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .random()
         ->range(0, N_LEDS)
         ->color(CRGB::White)
@@ -864,7 +864,7 @@ void loop() {
     rgb.nscale8(48);
 
     // This the base layer
-    $LED["WS2812"].assign(rgb);
+    LEDMNGR["WS2812"].assign(rgb);
 
     Tasks.update();
 }

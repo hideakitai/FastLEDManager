@@ -233,7 +233,7 @@ public:
 
 }  // namespace led
 
-#define $LED led::Manager::get()
+#define LEDMNGR led::Manager::get()
 
 #include <DebugLogRestoreState.h>
 
