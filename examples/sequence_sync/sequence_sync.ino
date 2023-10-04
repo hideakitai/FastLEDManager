@@ -1,17 +1,17 @@
 #include <FastLEDManager.h>
 
 static constexpr size_t N_LEDS {16};
-static constexpr uint8_t PIN_WS2812_DATA {32};
+static constexpr uint8_t PIN_WS2812_DATA {MOSI};
 
 void setup() {
     Serial.begin(115200);
     delay(2000);
 
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
     using namespace LEDSequence;
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .sequence()
         ->sync<Fill>([&](TaskRef<Fill> t) {
             t->color(CRGB(32, 0, 0));

@@ -1,7 +1,7 @@
 #include <FastLEDManager.h>
 
 static constexpr size_t N_LEDS {16};
-static constexpr uint8_t PIN_WS2812_DATA {32};
+static constexpr uint8_t PIN_WS2812_DATA {MOSI};
 
 CRGBArray<N_LEDS> rgb;
 
@@ -9,11 +9,11 @@ void setup() {
     Serial.begin(115200);
     delay(2000);
 
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .startFps(120);
 
     using namespace LEDSequence;
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .sequence("sq")  // create a series of sequences
         ->then<Fill>(1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
         ->then<Fill>(2, [&](TaskRef<Fill> t) { t->color(CRGB(64, 0, 0)); })
@@ -23,7 +23,7 @@ void setup() {
         ->then<Fill>(1, [&](TaskRef<Fill> t) { t->color(CRGB::Black); })
         ->startFpsForSec(30, 10., true);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .random()
         ->range(0, N_LEDS)
         ->color(CRGB::White)
@@ -41,7 +41,7 @@ void loop() {
     // NOTE: if this framerate is less than LEDController's framerate,
     // it causes flicker because assignment is valid only on frame
     // if you want not to flicker, please use attach() instead
-    $LED["WS2812"].assign(rgb);
+    LEDMNGR["WS2812"].assign(rgb);
 
     Tasks.update();
 }

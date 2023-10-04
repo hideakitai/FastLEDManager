@@ -16,5 +16,12 @@
     "version": "0.1.5",
     "license": "MIT",
     "frameworks": "arduino",
-    "platforms": "*"
+    "platforms": "*",
+    "dependencies":
+    {
+        "hideakitai/DebugLog": "*",
+        "hideakitai/FastLED": "*",
+        "hideakitai/TaskManager": "*",
+        "hideakitai/Tween": "*"
+    }
 }

@@ -403,7 +403,7 @@ public:
 
     template <typename TaskType>
     TaskRef<TaskType> overwrite() {
-        return create_sequence<TaskType>("overwrite");
+        return create_sequence<TaskType>("overwrite", true);
     }
 
     // ---------- Accessor ----------

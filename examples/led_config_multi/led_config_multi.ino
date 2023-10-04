@@ -7,8 +7,8 @@
 #include <FastLEDManager.h>
 
 static constexpr size_t N_LEDS {16};
-static constexpr uint8_t PIN_WS2812_DATA {32};
-static constexpr uint8_t PIN_SK6812_DATA {33};
+static constexpr uint8_t PIN_WS2812_DATA {2};
+static constexpr uint8_t PIN_SK6812_DATA {3};
 uint8_t WS2812_BRIGHTNESS {192};
 uint8_t SK6812_BRIGHTNESS {52};
 
@@ -17,7 +17,7 @@ void setup() {
     delay(2000);
 
     // These are the default configs
-    $LED.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
+    LEDMNGR.add<WS2812B, N_LEDS, PIN_WS2812_DATA, GRB>("WS2812")
         .brightness(WS2812_BRIGHTNESS)
         .dither(BINARY_DITHER)
         .correction(CRGB::White)
@@ -32,21 +32,21 @@ void setup() {
 #endif
         .startFps(120);
 
-    $LED.add<SK6812, N_LEDS, PIN_SK6812_DATA, GRB>("SK6812")
-        .configs($LED["WS2812"].configs())  // copy config from WS2812
+    LEDMNGR.add<SK6812, N_LEDS, PIN_SK6812_DATA, GRB>("SK6812")
+        .configs(LEDMNGR["WS2812"].configs())  // copy config from WS2812
         .brightness(SK6812_BRIGHTNESS)      // overwrite only brightness
         .startFps(120);
 
     // These are the default configs
-    // $LED.add<APA102, N_LEDS, PIN_APA102_DATA, PIN_APA102_CLK, GRB, DATA_RATE_MHZ(12)>("APA102", 120)
-    //     .configs($LED["WS2812"].configs())  // copy config from WS2812
+    // LEDMNGR.add<APA102, N_LEDS, PIN_APA102_DATA, PIN_APA102_CLK, GRB, DATA_RATE_MHZ(12)>("APA102", 120)
+    //     .configs(LEDMNGR["WS2812"].configs())  // copy config from WS2812
     //     .brightness(APA102_BRIGHTNESS)    // overwrite only brightness
     //     .startFps(120);
 
-    $LED["WS2812"]
+    LEDMNGR["WS2812"]
         .mood_machine()
         ->startFpsForSec(30, 20);
-    $LED["SK6812"]
+    LEDMNGR["SK6812"]
         .mood_machine()
         ->startFpsForSec(30, 20);
 }
